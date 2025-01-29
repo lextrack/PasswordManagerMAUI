@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PasswordManager.MainPage"
+             Title="Password Manager"
+             BackgroundColor="#F0F0F0">
+
+    <StackLayout Padding="20" Spacing="20">
+
+        <!-- Título de la aplicación -->
+        <Label Text="Password Manager"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#333333" />
+
+        <!-- Lista de contraseñas -->
+        <ListView x:Name="PasswordsList"
+                  ItemsSource="{Binding Passwords}"
+                  ItemSelected="OnPasswordSelected"
+                  HasUnevenRows="True"
+                  SeparatorVisibility="None"
+                  BackgroundColor="Transparent">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame Padding="15"
+                               Margin="0,5"
+                               BackgroundColor="White"
+                               CornerRadius="10"
+                               HasShadow="True">
+                            <StackLayout Spacing="10">
+                                <Label Text="{Binding Service}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#333333" />
+                                <Label Text="{Binding Username}"
+                                       FontSize="14"
+                                       TextColor="#666666" />
+                                <!-- Mostrar la contraseña censurada -->
+                                <Label Text="{Binding CensoredPassword}"
+                                       FontSize="14"
+                                       TextColor="#666666" />
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Botón para agregar nueva contraseña -->
+        <Button Text="Add New Password"
+                Clicked="OnAddPasswordClicked"
+                BackgroundColor="#6200EE"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                Padding="20,10"
+                HorizontalOptions="Fill" />
+
+    </StackLayout>
+</ContentPage>
