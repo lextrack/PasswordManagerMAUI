@@ -6,17 +6,61 @@ namespace PasswordManager
 {
     public partial class MainPage : ContentPage
     {
+        private readonly string _storageFile;
         public ObservableCollection<PasswordModel> Passwords { get; set; } = new ObservableCollection<PasswordModel>();
 
         public MainPage()
         {
             InitializeComponent();
+            _storageFile = Path.Combine(FileSystem.AppDataDirectory, "passwords.json");
             BindingContext = this;
+            LoadPasswords(); // Cargar passwords al iniciar
+        }
+
+        private void LoadPasswords()
+        {
+            try
+            {
+                if (File.Exists(_storageFile))
+                {
+                    string json = File.ReadAllText(_storageFile);
+                    var loadedPasswords = JsonSerializer.Deserialize<List<PasswordModel>>(json);
+                    Passwords.Clear();
+                    foreach (var password in loadedPasswords)
+                    {
+                        Passwords.Add(password);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores de carga
+                DisplayAlert("Error", $"Error loading passwords: {ex.Message}", "OK");
+            }
+        }
+
+        public void SavePasswords()
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(Passwords.ToList());
+                File.WriteAllText(_storageFile, json);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores de guardado
+                DisplayAlert("Error", $"Error saving passwords: {ex.Message}", "OK");
+            }
         }
 
         private async void OnAddPasswordClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddPasswordPage(this));
+            if (sender is Button button)
+            {
+                await button.ScaleTo(0.95, 100);
+                await button.ScaleTo(1, 100);
+                await Navigation.PushAsync(new AddPasswordPage(this));
+            }
         }
 
         private void OnPasswordSelected(object sender, SelectionChangedEventArgs e)
@@ -35,21 +79,41 @@ namespace PasswordManager
             }
         }
 
+        private async void OnButtonPressed(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                await button.ScaleTo(0.95, 100); // Reduce tamaño al 95% en 100ms
+            }
+        }
+
+        private async void OnButtonReleased(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                await button.ScaleTo(1, 100); // Vuelve a su tamaño normal
+            }
+        }
+
+        // Efecto de eliminación con fade out y reducción de tamaño
         private async void OnDeletePasswordClicked(object sender, EventArgs e)
         {
-            if (sender is Button button && button.CommandParameter is PasswordModel passwordToDelete)
+            if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
             {
-                bool confirm = await DisplayAlert("Confirm Delete",
-                    $"Are you sure you want to delete the password for {passwordToDelete.Service}?",
-                    "Yes", "No");
+                var frame = (Frame)imageButton.Parent.Parent;
+                await frame.ScaleTo(0, 200);
+                await frame.FadeTo(0, 200);
 
-                if (confirm)
+                if (PasswordsList.ItemsSource is IList<PasswordModel> passwords)
                 {
-                    Passwords.Remove(passwordToDelete);
-                    await DisplayAlert("Success", "Password deleted successfully", "OK");
+                    passwords.Remove(password);
+                    PasswordsList.ItemsSource = null;
+                    PasswordsList.ItemsSource = passwords;
+                    SavePasswords(); // Guardar después de eliminar
                 }
             }
         }
+
 
         private async void OnSaveBackupClicked(object sender, EventArgs e)
         {

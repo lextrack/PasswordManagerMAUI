@@ -9,7 +9,7 @@ public partial class AddPasswordPage : ContentPage
     public AddPasswordPage(MainPage mainPage)
     {
         InitializeComponent();
-        _mainPage = mainPage; // Guarda la referencia de MainPage
+        _mainPage = mainPage;
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)
@@ -21,9 +21,8 @@ public partial class AddPasswordPage : ContentPage
             Password = PasswordEntry.Text
         };
 
-        // Agrega la nueva contraseña a la lista en MainPage
         _mainPage.Passwords.Add(newPassword);
-
+        (_mainPage as MainPage)?.SavePasswords();
         await Navigation.PopAsync();
     }
 }

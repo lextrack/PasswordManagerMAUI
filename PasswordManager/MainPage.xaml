@@ -6,7 +6,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="ActionButtonStyle" TargetType="Button">
-                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontAttributes" Value="None"/>
                 <Setter Property="CornerRadius" Value="8"/>
                 <Setter Property="Margin" Value="5,5"/>
                 <Setter Property="Padding" Value="20,10"/>
@@ -37,7 +37,8 @@
                     <DataTemplate>
                         <Frame Margin="0,5"
                                CornerRadius="8"
-                               Padding="15">
+                               Padding="15"
+                               x:Name="PasswordFrame">
                             <Grid ColumnSpacing="15">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -69,12 +70,14 @@
             </CollectionView>
 
             <!-- Contenedor de botones -->
-            <Frame Padding="15" CornerRadius="8" BackgroundColor="#f0f0f0">
+            <Frame Padding="15" CornerRadius="8">
                 <VerticalStackLayout Spacing="10">
                     <Button Text="Add New Password"
                             SemanticProperties.Hint="Add a new password entry"
                             Style="{StaticResource ActionButtonStyle}"
-                            Clicked="OnAddPasswordClicked"/>
+                            Clicked="OnAddPasswordClicked"
+                            Pressed="OnButtonPressed"
+                            Released="OnButtonReleased"/>
 
                     <Grid ColumnSpacing="10">
                         <Grid.ColumnDefinitions>
@@ -86,13 +89,17 @@
                                 Text="Save Backup"
                                 SemanticProperties.Hint="Save a backup of your passwords"
                                 Style="{StaticResource ActionButtonStyle}"
-                                Clicked="OnSaveBackupClicked"/>
+                                Clicked="OnSaveBackupClicked"
+                                Pressed="OnButtonPressed"
+                                Released="OnButtonReleased"/>
 
                         <Button Grid.Column="1"
                                 Text="Load Backup"
                                 SemanticProperties.Hint="Load a backup of your passwords"
                                 Style="{StaticResource ActionButtonStyle}"
-                                Clicked="OnLoadBackupClicked"/>
+                                Clicked="OnLoadBackupClicked"
+                                Pressed="OnButtonPressed"
+                                Released="OnButtonReleased"/>
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
