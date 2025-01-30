@@ -20,7 +20,7 @@
     <Grid>
         <!-- Lista de contraseñas en un ScrollView -->
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="10" Spacing="20">
+            <VerticalStackLayout Padding="10" Spacing="15">
                 <CollectionView x:Name="PasswordsList"
                         ItemsSource="{Binding Passwords}"
                         SelectionMode="Single"

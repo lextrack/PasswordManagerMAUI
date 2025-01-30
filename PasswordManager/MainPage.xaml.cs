@@ -47,7 +47,6 @@ namespace PasswordManager
             }
             catch (Exception ex)
             {
-                // Manejo de errores de guardado
                 DisplayAlert("Error", $"Error saving passwords: {ex.Message}", "OK");
             }
         }
