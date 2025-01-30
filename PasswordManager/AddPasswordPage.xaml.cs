@@ -25,4 +25,21 @@ public partial class AddPasswordPage : ContentPage
         (_mainPage as MainPage)?.SavePasswords();
         await Navigation.PopAsync();
     }
+
+    private async void OnButtonPressed(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            await button.ScaleTo(0.95, 100); // Reduce el tamaño del botón al presionarlo
+        }
+    }
+
+    private async void OnButtonReleased(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            await button.ScaleTo(1, 100); // Restaura el tamaño al soltarlo
+        }
+    }
+
 }

@@ -14,7 +14,7 @@ namespace PasswordManager
             InitializeComponent();
             _storageFile = Path.Combine(FileSystem.AppDataDirectory, "passwords.json");
             BindingContext = this;
-            LoadPasswords(); // Cargar passwords al iniciar
+            LoadPasswords();
         }
 
         private void LoadPasswords()
@@ -34,7 +34,6 @@ namespace PasswordManager
             }
             catch (Exception ex)
             {
-                // Manejo de errores de carga
                 DisplayAlert("Error", $"Error loading passwords: {ex.Message}", "OK");
             }
         }
@@ -71,7 +70,6 @@ namespace PasswordManager
                              $"Service: {selectedPassword.Service}\nUsername: {selectedPassword.Username}\nPassword: {selectedPassword.Password}",
                              "OK");
 
-                // Limpiar la selección
                 if (sender is CollectionView collectionView)
                 {
                     collectionView.SelectedItem = null;
@@ -83,7 +81,7 @@ namespace PasswordManager
         {
             if (sender is Button button)
             {
-                await button.ScaleTo(0.95, 100); // Reduce tamaño al 95% en 100ms
+                await button.ScaleTo(0.95, 100);
             }
         }
 
@@ -91,25 +89,32 @@ namespace PasswordManager
         {
             if (sender is Button button)
             {
-                await button.ScaleTo(1, 100); // Vuelve a su tamaño normal
+                await button.ScaleTo(1, 100);
             }
         }
 
-        // Efecto de eliminación con fade out y reducción de tamaño
         private async void OnDeletePasswordClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
             {
-                var frame = (Frame)imageButton.Parent.Parent;
-                await frame.ScaleTo(0, 200);
-                await frame.FadeTo(0, 200);
+                bool isConfirmed = await DisplayAlert("Confirm Deletion",
+                                                       "Are you sure you want to delete this password?",
+                                                       "Yes",
+                                                       "No");
 
-                if (PasswordsList.ItemsSource is IList<PasswordModel> passwords)
+                if (isConfirmed)
                 {
-                    passwords.Remove(password);
-                    PasswordsList.ItemsSource = null;
-                    PasswordsList.ItemsSource = passwords;
-                    SavePasswords(); // Guardar después de eliminar
+                    var frame = (Frame)imageButton.Parent.Parent;
+                    await frame.ScaleTo(0, 200);
+                    await frame.FadeTo(0, 200);
+
+                    if (PasswordsList.ItemsSource is IList<PasswordModel> passwords)
+                    {
+                        passwords.Remove(password);
+                        PasswordsList.ItemsSource = null;
+                        PasswordsList.ItemsSource = passwords;
+                        SavePasswords(); 
+                    }
                 }
             }
         }
@@ -119,7 +124,6 @@ namespace PasswordManager
         {
             try
             {
-                // Verificar y solicitar permisos en Android
                 if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
                     var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
@@ -134,13 +138,10 @@ namespace PasswordManager
                     }
                 }
 
-                // Serializar la lista de contraseñas a JSON
                 string json = JsonSerializer.Serialize(Passwords);
 
-                // Obtener la fecha y hora actual
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
-                // Crear el nombre del archivo con la fecha y hora
                 string fileName = $"passwords_backup_{timestamp}.json";
                 string backupPath;
 
@@ -163,11 +164,9 @@ namespace PasswordManager
                     backupPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
                 }
 
-                // Guardar el archivo
                 await File.WriteAllTextAsync(backupPath, json);
                 await DisplayAlert("Backup", $"Backup saved successfully at: {backupPath}", "OK");
 
-                // Preguntar si el usuario desea compartir el archivo
                 bool shareFile = await DisplayAlert("Share Backup", "Do you want to share the backup file?", "Yes", "No");
                 if (shareFile)
                 {
