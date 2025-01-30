@@ -2,8 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PasswordManager.MainPage"
-             Title="Password Manager"
-             BackgroundColor="#F0F0F0">
+             Title="Password Manager">
 
     <StackLayout Padding="20" Spacing="20">
 
@@ -11,8 +10,7 @@
         <Label Text="Password Manager"
                FontSize="24"
                FontAttributes="Bold"
-               HorizontalOptions="Center"
-               TextColor="#333333" />
+               HorizontalOptions="Center"/>
 
         <!-- Lista de contraseñas -->
         <ListView x:Name="PasswordsList"
@@ -37,7 +35,6 @@
                                 <Label Text="{Binding Username}"
                                        FontSize="14"
                                        TextColor="#666666" />
-                                <!-- Mostrar la contraseña censurada -->
                                 <Label Text="{Binding CensoredPassword}"
                                        FontSize="14"
                                        TextColor="#666666" />
@@ -52,6 +49,26 @@
         <Button Text="Add New Password"
                 Clicked="OnAddPasswordClicked"
                 BackgroundColor="#6200EE"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                Padding="20,10"
+                HorizontalOptions="Fill" />
+
+        <!-- Botón para guardar backup -->
+        <Button Text="Save Backup"
+                Clicked="OnSaveBackupClicked"
+                BackgroundColor="#03DAC6"
+                TextColor="White"
+                FontAttributes="Bold"
+                CornerRadius="10"
+                Padding="20,10"
+                HorizontalOptions="Fill" />
+
+        <!-- Botón para cargar backup -->
+        <Button Text="Load Backup"
+                Clicked="OnLoadBackupClicked"
+                BackgroundColor="#FF0266"
                 TextColor="White"
                 FontAttributes="Bold"
                 CornerRadius="10"
