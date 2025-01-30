@@ -1,6 +1,4 @@
 using PasswordManager.Model;
-using PasswordManager.Utils;
-using System.Diagnostics;
 
 namespace PasswordManager;
 

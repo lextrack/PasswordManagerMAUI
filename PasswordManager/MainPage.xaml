@@ -3,77 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PasswordManager.MainPage"
              Title="Password Manager">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ActionButtonStyle" TargetType="Button">
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Margin" Value="5,5"/>
+                <Setter Property="Padding" Value="20,10"/>
+                <Setter Property="HorizontalOptions" Value="Fill"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-    <StackLayout Padding="20" Spacing="20">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
 
-        <!-- Título de la aplicación -->
-        <Label Text="Password Manager"
-               FontSize="24"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"/>
+            <!-- Lista de contraseñas -->
+            <CollectionView x:Name="PasswordsList"
+                           ItemsSource="{Binding Passwords}"
+                           SelectionMode="Single"
+                           SelectionChanged="OnPasswordSelected"
+                           Margin="0,0,0,10">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" 
+                                       VerticalOptions="Center">
+                        <Label Text="No passwords saved yet"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Click 'Add New Password' to get started"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5"
+                               CornerRadius="8"
+                               Padding="15">
+                            <Grid ColumnSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-        <!-- Lista de contraseñas -->
-        <ListView x:Name="PasswordsList"
-                  ItemsSource="{Binding Passwords}"
-                  ItemSelected="OnPasswordSelected"
-                  HasUnevenRows="True"
-                  SeparatorVisibility="None"
-                  BackgroundColor="Transparent">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Frame Padding="15"
-                               Margin="0,5"
-                               BackgroundColor="White"
-                               CornerRadius="10"
-                               HasShadow="True">
-                            <StackLayout Spacing="10">
-                                <Label Text="{Binding Service}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="#333333" />
-                                <Label Text="{Binding Username}"
-                                       FontSize="14"
-                                       TextColor="#666666" />
-                                <Label Text="{Binding CensoredPassword}"
-                                       FontSize="14"
-                                       TextColor="#666666" />
-                            </StackLayout>
+                                <StackLayout Grid.Column="0" 
+                                           Spacing="5">
+                                    <Label Text="{Binding Service}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding Username}"
+                                           FontSize="14"/>
+                                    <Label Text="{Binding CensoredPassword}"
+                                           FontSize="14"/>
+                                </StackLayout>
+
+                                <ImageButton Grid.Column="1"
+                                             Source="delete_icon.png"
+                                             HeightRequest="32"
+                                             WidthRequest="32"
+                                             CommandParameter="{Binding .}"
+                                             Clicked="OnDeletePasswordClicked"
+                                             BackgroundColor="Transparent"/>
+                            </Grid>
                         </Frame>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-        <!-- Botón para agregar nueva contraseña -->
-        <Button Text="Add New Password"
-                Clicked="OnAddPasswordClicked"
-                BackgroundColor="#6200EE"
-                TextColor="White"
-                FontAttributes="Bold"
-                CornerRadius="10"
-                Padding="20,10"
-                HorizontalOptions="Fill" />
+            <!-- Contenedor de botones -->
+            <Frame Padding="15" CornerRadius="8" BackgroundColor="#f0f0f0">
+                <VerticalStackLayout Spacing="10">
+                    <Button Text="Add New Password"
+                            SemanticProperties.Hint="Add a new password entry"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Clicked="OnAddPasswordClicked"/>
 
-        <!-- Botón para guardar backup -->
-        <Button Text="Save Backup"
-                Clicked="OnSaveBackupClicked"
-                BackgroundColor="#03DAC6"
-                TextColor="White"
-                FontAttributes="Bold"
-                CornerRadius="10"
-                Padding="20,10"
-                HorizontalOptions="Fill" />
+                    <Grid ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-        <!-- Botón para cargar backup -->
-        <Button Text="Load Backup"
-                Clicked="OnLoadBackupClicked"
-                BackgroundColor="#FF0266"
-                TextColor="White"
-                FontAttributes="Bold"
-                CornerRadius="10"
-                Padding="20,10"
-                HorizontalOptions="Fill" />
+                        <Button Grid.Column="0"
+                                Text="Save Backup"
+                                SemanticProperties.Hint="Save a backup of your passwords"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Clicked="OnSaveBackupClicked"/>
 
-    </StackLayout>
+                        <Button Grid.Column="1"
+                                Text="Load Backup"
+                                SemanticProperties.Hint="Load a backup of your passwords"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Clicked="OnLoadBackupClicked"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

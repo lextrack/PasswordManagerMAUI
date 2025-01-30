@@ -1,9 +1,6 @@
 ﻿using PasswordManager.Model;
-using PasswordManager.Utils;
 using System.Collections.ObjectModel;
 using System.Text.Json;
-using Microsoft.Maui.Storage;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 
 namespace PasswordManager
 {
@@ -22,15 +19,36 @@ namespace PasswordManager
             await Navigation.PushAsync(new AddPasswordPage(this));
         }
 
-        private void OnPasswordSelected(object sender, SelectedItemChangedEventArgs e)
+        private void OnPasswordSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.SelectedItem is PasswordModel selectedPassword)
+            if (e.CurrentSelection.FirstOrDefault() is PasswordModel selectedPassword)
             {
                 DisplayAlert("Password Details",
                              $"Service: {selectedPassword.Service}\nUsername: {selectedPassword.Username}\nPassword: {selectedPassword.Password}",
                              "OK");
+
+                // Limpiar la selección
+                if (sender is CollectionView collectionView)
+                {
+                    collectionView.SelectedItem = null;
+                }
             }
-            PasswordsList.SelectedItem = null;
+        }
+
+        private async void OnDeletePasswordClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is PasswordModel passwordToDelete)
+            {
+                bool confirm = await DisplayAlert("Confirm Delete",
+                    $"Are you sure you want to delete the password for {passwordToDelete.Service}?",
+                    "Yes", "No");
+
+                if (confirm)
+                {
+                    Passwords.Remove(passwordToDelete);
+                    await DisplayAlert("Success", "Password deleted successfully", "OK");
+                }
+            }
         }
 
         private async void OnSaveBackupClicked(object sender, EventArgs e)
@@ -166,5 +184,4 @@ namespace PasswordManager
             }
         }
     }
-
 }
