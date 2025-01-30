@@ -37,6 +37,7 @@ namespace PasswordManager
         {
             try
             {
+                // Verificar y solicitar permisos en Android
                 if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
                     var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
@@ -51,13 +52,20 @@ namespace PasswordManager
                     }
                 }
 
+                // Serializar la lista de contraseñas a JSON
                 string json = JsonSerializer.Serialize(Passwords);
+
+                // Obtener la fecha y hora actual
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+                // Crear el nombre del archivo con la fecha y hora
+                string fileName = $"passwords_backup_{timestamp}.json";
                 string backupPath;
 
                 if (DeviceInfo.Platform == DevicePlatform.WinUI)
                 {
                     string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    backupPath = Path.Combine(documentsPath, "passwords_backup.json");
+                    backupPath = Path.Combine(documentsPath, fileName);
                 }
                 else if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
@@ -66,16 +74,18 @@ namespace PasswordManager
                     {
                         Directory.CreateDirectory(downloadsPath);
                     }
-                    backupPath = Path.Combine(downloadsPath, "passwords_backup.json");
+                    backupPath = Path.Combine(downloadsPath, fileName);
                 }
                 else
                 {
-                    backupPath = Path.Combine(FileSystem.AppDataDirectory, "passwords_backup.json");
+                    backupPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
                 }
 
+                // Guardar el archivo
                 await File.WriteAllTextAsync(backupPath, json);
                 await DisplayAlert("Backup", $"Backup saved successfully at: {backupPath}", "OK");
 
+                // Preguntar si el usuario desea compartir el archivo
                 bool shareFile = await DisplayAlert("Share Backup", "Do you want to share the backup file?", "Yes", "No");
                 if (shareFile)
                 {
