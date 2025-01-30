@@ -3,19 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PasswordManager.MainPage"
              Title="Password Manager">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="ActionButtonStyle" TargetType="Button">
-                <Setter Property="FontAttributes" Value="None"/>
-                <Setter Property="CornerRadius" Value="8"/>
-                <Setter Property="Margin" Value="5,5"/>
-                <Setter Property="Padding" Value="20,10"/>
-                <Setter Property="HorizontalOptions" Value="Fill"/>
-                <Setter Property="BackgroundColor" Value="#007AFF"/>
-                <Setter Property="TextColor" Value="White"/>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <Grid>
         <!-- Lista de contraseñas en un ScrollView -->
@@ -62,47 +49,63 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Contenedor de botones en la parte inferior -->
+        <!-- Container buttons -->
         <VerticalStackLayout Grid.Row="1"
                      Padding="10"
-                     Margin="0,5"
+                     Spacing="3"
                      VerticalOptions="End">
-            <Button Text="Add New Password"
-            SemanticProperties.Hint="Add a new password entry"
-            Style="{StaticResource ActionButtonStyle}"
-            Clicked="OnAddPasswordClicked"
-            Pressed="OnButtonPressed"
-            Released="OnButtonReleased"/>
 
-            <Grid ColumnSpacing="10">
+            <!-- Add password -->
+            <Button Text="Add New Password"
+                    SemanticProperties.Hint="Add a new password entry"
+                    Clicked="OnAddPasswordClicked"
+                    Pressed="OnButtonPressed"
+                    Released="OnButtonReleased"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="#007AFF"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10"
+                    Margin="0,0,0,10"/>
+
+            <!-- Grid backup -->
+            <Grid ColumnSpacing="15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
+                <!-- Save backup -->
                 <Button Grid.Column="0"
-                Text="Save Backup"
-                SemanticProperties.Hint="Save a backup of your passwords"
-                Style="{StaticResource ActionButtonStyle}"
-                Clicked="OnSaveBackupClicked"
-                Pressed="OnButtonPressed"
-                Released="OnButtonReleased"/>
+                        Text="Save Backup"
+                        SemanticProperties.Hint="Save a backup of your passwords"
+                        Clicked="OnSaveBackupClicked"
+                        Pressed="OnButtonPressed"
+                        Released="OnButtonReleased"
+                        HorizontalOptions="Fill"
+                        BackgroundColor="#007AFF"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="20,10"/>
 
+                <!-- Load backup -->
                 <Button Grid.Column="1"
-                Text="Load Backup"
-                SemanticProperties.Hint="Load a backup of your passwords"
-                Style="{StaticResource ActionButtonStyle}"
-                Clicked="OnLoadBackupClicked"
-                Pressed="OnButtonPressed"
-                Released="OnButtonReleased"/>
+                        Text="Load Backup"
+                        SemanticProperties.Hint="Load a backup of your passwords"
+                        Clicked="OnLoadBackupClicked"
+                        Pressed="OnButtonPressed"
+                        Released="OnButtonReleased"
+                        HorizontalOptions="Fill"
+                        BackgroundColor="#007AFF"
+                        TextColor="White"
+                        CornerRadius="8"
+                        Padding="20,10"/>
             </Grid>
         </VerticalStackLayout>
 
-        <!-- Definir las filas en el Grid -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
     </Grid>
-
 </ContentPage>

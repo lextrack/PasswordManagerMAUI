@@ -10,6 +10,7 @@ public partial class AddPasswordPage : ContentPage
     {
         InitializeComponent();
         _mainPage = mainPage;
+        BindingContext = this;
     }
 
     private async void OnSaveClicked(object sender, EventArgs e)
@@ -21,8 +22,12 @@ public partial class AddPasswordPage : ContentPage
             Password = PasswordEntry.Text
         };
 
-        _mainPage.Passwords.Add(newPassword);
-        (_mainPage as MainPage)?.SavePasswords();
+        if (_mainPage != null && _mainPage.Passwords != null)
+        {
+            _mainPage.Passwords.Add(newPassword);
+            _mainPage.SavePasswords();
+        }
+
         await Navigation.PopAsync();
     }
 

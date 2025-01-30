@@ -55,9 +55,16 @@ namespace PasswordManager
         {
             if (sender is Button button)
             {
-                await button.ScaleTo(0.95, 100);
-                await button.ScaleTo(1, 100);
-                await Navigation.PushAsync(new AddPasswordPage(this));
+                try
+                {
+                    await button.ScaleTo(0.95, 100);
+                    await button.ScaleTo(1, 100);
+                    await Navigation.PushAsync(new AddPasswordPage(this));
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", $"Error navigating to AddPasswordPage: {ex.Message}", "OK");
+                }
             }
         }
 
