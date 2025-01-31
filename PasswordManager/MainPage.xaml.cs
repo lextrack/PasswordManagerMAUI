@@ -68,37 +68,21 @@ namespace PasswordManager
             }
         }
 
-        private void OnPasswordSelected(object sender, SelectionChangedEventArgs e)
+        private async void OnPasswordSelected(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is PasswordModel selectedPassword)
             {
-                DisplayAlert("Password Details",
+                await DisplayAlert("Password Details",
                              $"Service: {selectedPassword.Service}\nUsername: {selectedPassword.Username}\nPassword: {selectedPassword.Password}",
                              "OK");
 
+                // Desseleccionar el elemento
                 if (sender is CollectionView collectionView)
                 {
                     collectionView.SelectedItem = null;
                 }
             }
         }
-
-        private async void OnButtonPressed(object sender, EventArgs e)
-        {
-            if (sender is Button button)
-            {
-                await button.ScaleTo(0.95, 100);
-            }
-        }
-
-        private async void OnButtonReleased(object sender, EventArgs e)
-        {
-            if (sender is Button button)
-            {
-                await button.ScaleTo(1, 100);
-            }
-        }
-
         private async void OnDeletePasswordClicked(object sender, EventArgs e)
         {
             if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
@@ -110,22 +94,40 @@ namespace PasswordManager
 
                 if (isConfirmed)
                 {
-                    var frame = (Frame)imageButton.Parent.Parent;
-                    await frame.ScaleTo(0, 200);
-                    await frame.FadeTo(0, 200);
+                    // Intentar encontrar el Frame padre de manera más robusta
+                    var frame = imageButton.Parent as Frame ??
+                                imageButton.Parent.Parent as Frame;
 
-                    if (PasswordsList.ItemsSource is IList<PasswordModel> passwords)
+                    if (frame != null)
                     {
-                        passwords.Remove(password);
-                        PasswordsList.ItemsSource = null;
-                        PasswordsList.ItemsSource = passwords;
-                        SavePasswords(); 
+                        await frame.ScaleTo(0, 200);
+                        await frame.FadeTo(0, 200);
                     }
+
+                    // Usar ToList() para evitar modificación de colección durante iteración
+                    var passwords = Passwords.ToList();
+                    passwords.Remove(password);
+
+                    // Limpiar y repoblar la colección
+                    Passwords.Clear();
+                    foreach (var p in passwords)
+                    {
+                        Passwords.Add(p);
+                    }
+
+                    SavePasswords();
                 }
             }
         }
 
-
+        private async void OnCopyPasswordClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
+            {
+                await Clipboard.SetTextAsync(password.Password);
+                await DisplayAlert("Copied", "Password copied to clipboard", "OK");
+            }
+        }
         private async void OnSaveBackupClicked(object sender, EventArgs e)
         {
             try
@@ -250,6 +252,22 @@ namespace PasswordManager
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Failed to load backup: {ex.Message}", "OK");
+            }
+        }
+
+        private async void OnButtonPressed(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                await button.ScaleTo(0.95, 100);
+            }
+        }
+
+        private async void OnButtonReleased(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                await button.ScaleTo(1, 100);
             }
         }
     }

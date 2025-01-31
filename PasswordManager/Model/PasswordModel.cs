@@ -2,9 +2,35 @@
 {
     public class PasswordModel
     {
-        public string Service { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string CensoredPassword => new string('*', Password.Length);
+        public string Service { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+
+        public string CensoredPassword
+        {
+            get
+            {
+                // Manejo seguro para evitar NullReferenceException
+                return string.IsNullOrEmpty(Password)
+                    ? string.Empty
+                    : new string('*', Password.Length);
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PasswordModel other)
+            {
+                return Service == other.Service &&
+                       Username == other.Username &&
+                       Password == other.Password;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Service, Username, Password);
+        }
     }
 }
