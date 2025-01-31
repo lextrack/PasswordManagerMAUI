@@ -22,28 +22,33 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame CornerRadius="8" Padding="10" Margin="0,10" x:Name="PasswordFrame">
-                                <Grid ColumnDefinitions="*, Auto, Auto">
-                                    <StackLayout Grid.Column="0" Spacing="3">
-                                        <Label Text="{Binding Service}" FontSize="18" FontAttributes="Bold"/>
-                                        <Label Text="{Binding Username}" FontSize="14"/>
-                                        <Label Text="{Binding CensoredPassword}" FontSize="14"/>
-                                    </StackLayout>
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnPasswordSelected" CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
+                                    <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
+                                        <StackLayout Grid.Column="0" Spacing="3">
+                                            <Label Text="{Binding Service}" FontSize="18" FontAttributes="Bold"/>
+                                            <Label Text="{Binding Username}" FontSize="14"/>
+                                            <Label Text="{Binding CensoredPassword}" FontSize="14"/>
+                                        </StackLayout>
 
-                                    <ImageButton Grid.Column="1"
-                             Source="copy_icon.png"
-                             HeightRequest="48"
-                             WidthRequest="48"
-                             CommandParameter="{Binding .}"
-                             Clicked="OnCopyPasswordClicked"
-                             BackgroundColor="Transparent"/>
+                                        <ImageButton Grid.Column="1"
+                                            Source="copy_icon.png"
+                                            HeightRequest="32"
+                                            WidthRequest="32"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnCopyPasswordClicked"
+                                            BackgroundColor="Transparent"/>
 
-                                    <ImageButton Grid.Column="2"
-                             Source="delete_icon.png"
-                             HeightRequest="48"
-                             WidthRequest="48"
-                             CommandParameter="{Binding .}"
-                             Clicked="OnDeletePasswordClicked"
-                             BackgroundColor="Transparent"/>
+                                        <ImageButton Grid.Column="2"
+                                            Source="delete_icon.png"
+                                            HeightRequest="32"
+                                            WidthRequest="32"       
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnDeletePasswordClicked"
+                                            BackgroundColor="Transparent"/>
+                                    </Grid>
                                 </Grid>
                             </Frame>
                         </DataTemplate>

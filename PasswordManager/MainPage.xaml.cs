@@ -68,19 +68,27 @@ namespace PasswordManager
             }
         }
 
-        private async void OnPasswordSelected(object sender, SelectionChangedEventArgs e)
+        private async void OnPasswordSelected(object sender, EventArgs e)
         {
-            if (e.CurrentSelection.FirstOrDefault() is PasswordModel selectedPassword)
+            // Check if the parameter is passed through the CommandParameter
+            PasswordModel selectedPassword = null;
+
+            if (e is TappedEventArgs tappedArgs && tappedArgs.Parameter is PasswordModel password)
+            {
+                selectedPassword = password;
+            }
+
+            // If not found in TappedEventArgs, try to find from the binding context
+            if (selectedPassword == null && sender is Element element)
+            {
+                selectedPassword = element.BindingContext as PasswordModel;
+            }
+
+            if (selectedPassword != null)
             {
                 await DisplayAlert("Password Details",
                              $"Service: {selectedPassword.Service}\nUsername: {selectedPassword.Username}\nPassword: {selectedPassword.Password}",
                              "OK");
-
-                // Desseleccionar el elemento
-                if (sender is CollectionView collectionView)
-                {
-                    collectionView.SelectedItem = null;
-                }
             }
         }
         private async void OnDeletePasswordClicked(object sender, EventArgs e)
