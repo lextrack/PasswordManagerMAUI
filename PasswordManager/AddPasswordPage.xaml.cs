@@ -25,7 +25,7 @@ public partial class AddPasswordPage : ContentPage
         if (_mainPage != null && _mainPage.Passwords != null)
         {
             _mainPage.Passwords.Add(newPassword);
-            _mainPage.SavePasswords();
+            _mainPage.SavePasswordsAsync();
         }
 
         await Navigation.PopAsync();

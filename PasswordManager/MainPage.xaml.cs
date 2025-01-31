@@ -1,29 +1,56 @@
 ﻿using PasswordManager.Model;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace PasswordManager
 {
     public partial class MainPage : ContentPage
     {
-        private readonly string _storageFile;
+        private string _storageFile;
         public ObservableCollection<PasswordModel> Passwords { get; set; } = new ObservableCollection<PasswordModel>();
 
         public MainPage()
         {
             InitializeComponent();
-            _storageFile = Path.Combine(FileSystem.AppDataDirectory, "passwords.json");
             BindingContext = this;
-            LoadPasswords();
         }
 
-        private void LoadPasswords()
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            Debug.WriteLine("OnAppearing started");
+
+            if (!await IsUserAuthenticatedAsync())
+            {
+                Debug.WriteLine("User not authenticated. Redirecting to LoginPage...");
+                await Navigation.PushAsync(new LoginPage());
+                return;
+            }
+
+            string username = await SecureStorage.Default.GetAsync("current_user");
+            Debug.WriteLine($"Current user: {username}");
+
+            _storageFile = Path.Combine(FileSystem.AppDataDirectory, $"passwords_{username}.json");
+            Debug.WriteLine($"Storage file: {_storageFile}");
+
+            await LoadPasswordsAsync();
+            Debug.WriteLine("Passwords loaded successfully.");
+        }
+
+        private async Task<bool> IsUserAuthenticatedAsync()
+        {
+            string username = await SecureStorage.Default.GetAsync("current_user");
+            return !string.IsNullOrEmpty(username);
+        }
+
+        private async Task LoadPasswordsAsync()
         {
             try
             {
                 if (File.Exists(_storageFile))
                 {
-                    string json = File.ReadAllText(_storageFile);
+                    string json = await File.ReadAllTextAsync(_storageFile);
                     var loadedPasswords = JsonSerializer.Deserialize<List<PasswordModel>>(json);
                     Passwords.Clear();
                     foreach (var password in loadedPasswords)
@@ -34,20 +61,20 @@ namespace PasswordManager
             }
             catch (Exception ex)
             {
-                DisplayAlert("Error", $"Error loading passwords: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Error loading passwords: {ex.Message}", "OK");
             }
         }
 
-        public void SavePasswords()
+        public async Task SavePasswordsAsync()
         {
             try
             {
                 string json = JsonSerializer.Serialize(Passwords.ToList());
-                File.WriteAllText(_storageFile, json);
+                await File.WriteAllTextAsync(_storageFile, json);
             }
             catch (Exception ex)
             {
-                DisplayAlert("Error", $"Error saving passwords: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Error saving passwords: {ex.Message}", "OK");
             }
         }
 
@@ -70,7 +97,6 @@ namespace PasswordManager
 
         private async void OnPasswordSelected(object sender, EventArgs e)
         {
-            // Check if the parameter is passed through the CommandParameter
             PasswordModel selectedPassword = null;
 
             if (e is TappedEventArgs tappedArgs && tappedArgs.Parameter is PasswordModel password)
@@ -78,7 +104,6 @@ namespace PasswordManager
                 selectedPassword = password;
             }
 
-            // If not found in TappedEventArgs, try to find from the binding context
             if (selectedPassword == null && sender is Element element)
             {
                 selectedPassword = element.BindingContext as PasswordModel;
@@ -102,7 +127,6 @@ namespace PasswordManager
 
                 if (isConfirmed)
                 {
-                    // Intentar encontrar el Frame padre de manera más robusta
                     var frame = imageButton.Parent as Frame ??
                                 imageButton.Parent.Parent as Frame;
 
@@ -112,18 +136,16 @@ namespace PasswordManager
                         await frame.FadeTo(0, 200);
                     }
 
-                    // Usar ToList() para evitar modificación de colección durante iteración
                     var passwords = Passwords.ToList();
                     passwords.Remove(password);
 
-                    // Limpiar y repoblar la colección
                     Passwords.Clear();
                     foreach (var p in passwords)
                     {
                         Passwords.Add(p);
                     }
 
-                    SavePasswords();
+                    SavePasswordsAsync();
                 }
             }
         }

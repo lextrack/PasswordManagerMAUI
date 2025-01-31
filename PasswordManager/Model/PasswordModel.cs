@@ -10,7 +10,6 @@
         {
             get
             {
-                // Manejo seguro para evitar NullReferenceException
                 return string.IsNullOrEmpty(Password)
                     ? string.Empty
                     : new string('*', Password.Length);
