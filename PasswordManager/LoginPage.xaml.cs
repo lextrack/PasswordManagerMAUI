@@ -85,4 +85,20 @@ public partial class LoginPage : ContentPage
 
         return true;
     }
+
+    private async void OnButtonPressed(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            await button.ScaleTo(0.95, 100);
+        }
+    }
+
+    private async void OnButtonReleased(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            await button.ScaleTo(1, 100);
+        }
+    }
 }

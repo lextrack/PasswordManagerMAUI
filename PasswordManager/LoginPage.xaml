@@ -4,10 +4,35 @@
              x:Class="PasswordManager.LoginPage"
              Title="Login">
 
-    <StackLayout Padding="20" VerticalOptions="Center">
-        <Entry x:Name="UsernameEntry" Placeholder="Username" />
-        <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" />
-        <Button Text="Login" Clicked="OnLoginClicked" />
-        <Button Text="Register" Clicked="OnRegisterClicked" />
-    </StackLayout>
+    <Grid>
+        <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center">
+            <Frame CornerRadius="8" Padding="10">
+                <Entry x:Name="UsernameEntry" Placeholder="Username" FontSize="18" />
+            </Frame>
+
+            <Frame CornerRadius="8" Padding="10">
+                <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" FontSize="18" />
+            </Frame>
+
+            <Button Text="Login"
+                    Clicked="OnLoginClicked"
+                    Pressed="OnButtonPressed"
+                    Released="OnButtonReleased"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="#007AFF"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10"/>
+
+            <Button Text="Register"
+                    Clicked="OnRegisterClicked"
+                    Pressed="OnButtonPressed"
+                    Released="OnButtonReleased"
+                    HorizontalOptions="Fill"
+                    BackgroundColor="#007AFF"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="20,10"/>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
