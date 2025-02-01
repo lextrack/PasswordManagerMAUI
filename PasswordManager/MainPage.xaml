@@ -2,17 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PasswordManager.MainPage"
+             NavigationPage.HasBackButton="False"
              Title="Password Manager">
 
     <Grid>
+        <!-- Encabezado con título y botón de Logout -->
+        <Grid Padding="10" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1"
+                    Text="Logout"
+                    Clicked="OnLogoutClicked"
+                    BackgroundColor="Red"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="10,5"
+                    FontSize="14"/>
+        </Grid>
+
         <!-- Lista de contraseñas en un ScrollView -->
-        <ScrollView Grid.Row="0">
+        <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="10" Spacing="15">
                 <CollectionView x:Name="PasswordsList"
-                        ItemsSource="{Binding Passwords}"
-                        SelectionMode="Single"
-                        SelectionChanged="OnPasswordSelected"
-                        Margin="0,0,0,10">
+                                ItemsSource="{Binding Passwords}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnPasswordSelected"
+                                Margin="0,0,0,10">
                     <CollectionView.EmptyView>
                         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                             <Label Text="No passwords saved yet" HorizontalOptions="Center"/>
@@ -21,7 +39,7 @@
                     </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame CornerRadius="8" Padding="10" Margin="0,10" x:Name="PasswordFrame">
+                            <Frame CornerRadius="8" Padding="10" Margin="0,10">
                                 <Grid>
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="OnPasswordSelected" CommandParameter="{Binding .}"/>
@@ -34,20 +52,20 @@
                                         </StackLayout>
 
                                         <ImageButton Grid.Column="1"
-                                            Source="copy_icon.png"
-                                            HeightRequest="32"
-                                            WidthRequest="32"
-                                            CommandParameter="{Binding .}"
-                                            Clicked="OnCopyPasswordClicked"
-                                            BackgroundColor="Transparent"/>
+                                                     Source="copy_icon.png"
+                                                     HeightRequest="32"
+                                                     WidthRequest="32"
+                                                     CommandParameter="{Binding .}"
+                                                     Clicked="OnCopyPasswordClicked"
+                                                     BackgroundColor="Transparent"/>
 
                                         <ImageButton Grid.Column="2"
-                                            Source="delete_icon.png"
-                                            HeightRequest="32"
-                                            WidthRequest="32"       
-                                            CommandParameter="{Binding .}"
-                                            Clicked="OnDeletePasswordClicked"
-                                            BackgroundColor="Transparent"/>
+                                                     Source="delete_icon.png"
+                                                     HeightRequest="32"
+                                                     WidthRequest="32"       
+                                                     CommandParameter="{Binding .}"
+                                                     Clicked="OnDeletePasswordClicked"
+                                                     BackgroundColor="Transparent"/>
                                     </Grid>
                                 </Grid>
                             </Frame>
@@ -58,10 +76,10 @@
         </ScrollView>
 
         <!-- Container buttons -->
-        <VerticalStackLayout Grid.Row="1"
-                     Padding="10"
-                     Spacing="3"
-                     VerticalOptions="End">
+        <VerticalStackLayout Grid.Row="2"
+                             Padding="10"
+                             Spacing="3"
+                             VerticalOptions="End">
 
             <!-- Add password -->
             <Button Text="Add New Password"
@@ -112,6 +130,7 @@
         </VerticalStackLayout>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>

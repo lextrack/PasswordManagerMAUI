@@ -44,6 +44,12 @@ namespace PasswordManager
             return !string.IsNullOrEmpty(username);
         }
 
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            SecureStorage.Default.Remove("current_user");
+            await Navigation.PushAsync(new LoginPage());
+        }
+
         private async Task LoadPasswordsAsync()
         {
             try

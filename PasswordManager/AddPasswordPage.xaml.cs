@@ -31,11 +31,16 @@ public partial class AddPasswordPage : ContentPage
         await Navigation.PopAsync();
     }
 
+    private void OnBackClicked(object sender, EventArgs e)
+    {
+        Navigation.PopAsync();
+    }
+
     private async void OnButtonPressed(object sender, EventArgs e)
     {
         if (sender is Button button)
         {
-            await button.ScaleTo(0.95, 100); // Reduce el tamaño del botón al presionarlo
+            await button.ScaleTo(0.95, 100);
         }
     }
 
@@ -43,7 +48,7 @@ public partial class AddPasswordPage : ContentPage
     {
         if (sender is Button button)
         {
-            await button.ScaleTo(1, 100); // Restaura el tamaño al soltarlo
+            await button.ScaleTo(1, 100);
         }
     }
 
