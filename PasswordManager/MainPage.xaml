@@ -6,7 +6,6 @@
              Title="Password Manager">
 
     <Grid>
-        <!-- Encabezado con título y botón de Logout -->
         <Grid Padding="10" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

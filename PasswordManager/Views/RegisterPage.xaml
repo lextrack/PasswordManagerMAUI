@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PasswordManager.LoginPage"
-             NavigationPage.HasBackButton="False"
-             Title="Login">
+             x:Class="PasswordManager.Views.RegisterPage"
+             Title="Register"
+             NavigationPage.HasBackButton="True">
 
     <Grid>
         <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center">
+            <Label Text="Create an Account"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   TextColor="#007AFF"
+                   FontAttributes="Bold" />
+
             <Frame CornerRadius="8" Padding="10">
                 <Entry x:Name="UsernameEntry" Placeholder="Username" FontSize="18" />
             </Frame>
@@ -15,25 +21,26 @@
                 <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" FontSize="18" />
             </Frame>
 
-            <Button Text="Login"
-                    Clicked="OnLoginClicked"
-                    Pressed="OnButtonPressed"
-                    Released="OnButtonReleased"
-                    HorizontalOptions="Fill"
-                    BackgroundColor="#007AFF"
-                    TextColor="White"
-                    CornerRadius="8"
-                    Padding="20,10"/>
+            <Frame CornerRadius="8" Padding="10">
+                <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" FontSize="18" />
+            </Frame>
 
             <Button Text="Register"
                     Clicked="OnRegisterClicked"
                     Pressed="OnButtonPressed"
                     Released="OnButtonReleased"
                     HorizontalOptions="Fill"
-                    BackgroundColor="ForestGreen" 
-                TextColor="White"
+                    BackgroundColor="ForestGreen"
+                    TextColor="White"
                     CornerRadius="8"
                     Padding="20,10"/>
+
+            <Label Text="Please choose a username and a strong password. Make sure to confirm your password."
+                   FontSize="14"
+                   TextColor="#666"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,10,0,0" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
