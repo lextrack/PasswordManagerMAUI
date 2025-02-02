@@ -17,18 +17,5 @@ namespace PasswordManager
             Window.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
 #endif
         }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-
-#if ANDROID
-            // Try to occult the app
-            if (!IsFinishing)
-            {
-                MoveTaskToBack(true);
-            }
-#endif
-        }
     }
 }
