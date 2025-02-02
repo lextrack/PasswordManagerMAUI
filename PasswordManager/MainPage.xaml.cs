@@ -1,5 +1,6 @@
 ﻿using PasswordManager.Model;
 using PasswordManager.Utils;
+using PasswordManager.Views;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
@@ -10,6 +11,8 @@ namespace PasswordManager
     {
         private string _storageFile;
         public ObservableCollection<PasswordModel> Passwords { get; set; } = new ObservableCollection<PasswordModel>();
+        private ObservableCollection<PasswordModel> _allPasswords = new ObservableCollection<PasswordModel>();
+        private string _currentSearchText = string.Empty;
 
         public MainPage()
         {
@@ -62,22 +65,29 @@ namespace PasswordManager
             await Navigation.PushAsync(new LoginPage());
         }
 
+        private async void OnAboutClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new About());
+        }
+
         private async Task LoadPasswordsAsync()
         {
             try
             {
-                // Delay to watch the loading in action
                 await Task.Delay(300);
 
                 if (File.Exists(_storageFile))
                 {
                     string json = await File.ReadAllTextAsync(_storageFile);
                     var loadedPasswords = JsonSerializer.Deserialize<List<PasswordModel>>(json);
+
+                    _allPasswords.Clear();
                     Passwords.Clear();
+
                     foreach (var password in loadedPasswords)
                     {
-                        // Decrypt password using EncryptionHelper
                         password.Password = EncryptionHelper.Decrypt(password.Password);
+                        _allPasswords.Add(password);
                         Passwords.Add(password);
                     }
                 }
@@ -87,6 +97,35 @@ namespace PasswordManager
                 await DisplayAlert("Error", $"Error loading passwords: {ex.Message}", "OK");
             }
         }
+
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            _currentSearchText = e.NewTextValue?.ToLower() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(_currentSearchText))
+            {
+                // If search is empty, show all passwords
+                Passwords.Clear();
+                foreach (var password in _allPasswords)
+                {
+                    Passwords.Add(password);
+                }
+                return;
+            }
+
+            // Filter passwords based on search text
+            var filteredPasswords = _allPasswords
+                .Where(p => p.Service.ToLower().Contains(_currentSearchText))
+                .ToList();
+
+            // Update the observable collection
+            Passwords.Clear();
+            foreach (var password in filteredPasswords)
+            {
+                Passwords.Add(password);
+            }
+        }
+
 
         public async Task SavePasswordsAsync()
         {
@@ -123,7 +162,13 @@ namespace PasswordManager
                 {
                     await button.ScaleTo(0.95, 100);
                     await button.ScaleTo(1, 100);
-                    await Navigation.PushAsync(new AddPasswordPage(this));
+                    var addPasswordPage = new AddPasswordPage(this);
+                    await Navigation.PushAsync(addPasswordPage);
+
+                    // When returning from AddPasswordPage, update _allPasswords
+                    _allPasswords = new ObservableCollection<PasswordModel>(Passwords);
+                    // Reapply current search filter
+                    OnSearchTextChanged(null, new TextChangedEventArgs(string.Empty, _currentSearchText));
                 }
                 catch (Exception ex)
                 {
@@ -158,9 +203,9 @@ namespace PasswordManager
             if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
             {
                 bool isConfirmed = await DisplayAlert("Confirm Deletion",
-                                                       "Are you sure you want to delete this password?",
-                                                       "Yes",
-                                                       "No");
+                                                    "Are you sure you want to delete this password?",
+                                                    "Yes",
+                                                    "No");
 
                 if (isConfirmed)
                 {
@@ -173,14 +218,8 @@ namespace PasswordManager
                         await frame.FadeTo(0, 200);
                     }
 
-                    var passwords = Passwords.ToList();
-                    passwords.Remove(password);
-
-                    Passwords.Clear();
-                    foreach (var p in passwords)
-                    {
-                        Passwords.Add(p);
-                    }
+                    _allPasswords.Remove(password);
+                    Passwords.Remove(password);
 
                     SavePasswordsAsync();
                 }
