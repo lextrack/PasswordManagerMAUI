@@ -6,6 +6,7 @@
              Title="Password Manager">
 
     <Grid>
+        
         <Grid Padding="10" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -20,26 +21,6 @@
                     CornerRadius="8"
                     Padding="10,5"
                     FontSize="14"/>
-        </Grid>
-
-        <!-- Loading Indicator -->
-        <Grid x:Name="LoadingGrid" 
-              Grid.Row="0" 
-              Grid.RowSpan="3" 
-              BackgroundColor="#80000000" 
-              IsVisible="False">
-            <VerticalStackLayout HorizontalOptions="Center" 
-                               VerticalOptions="Center" 
-                               Spacing="10">
-                <ActivityIndicator IsRunning="True" 
-                                 Color="#007AFF" 
-                                 HeightRequest="50" 
-                                 WidthRequest="50"/>
-                <Label Text="Loading passwords..." 
-                       TextColor="White" 
-                       FontSize="16" 
-                       HorizontalOptions="Center"/>
-            </VerticalStackLayout>
         </Grid>
 
         <!-- Passowrd list -->
@@ -59,12 +40,12 @@
                                 <Label Text="No passwords saved yet" 
                                        HorizontalOptions="Center"
                                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                                       FontSize="18"
+                                       FontSize="12"
                                        FontAttributes="Bold"/>
                                 <Label Text="Click 'Add New Password' to get started" 
                                        HorizontalOptions="Center"
                                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                                       FontSize="16"/>
+                                       FontSize="13"/>
                             </VerticalStackLayout>
                         </Grid>
                     </CollectionView.EmptyView>
@@ -112,6 +93,27 @@
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- Loading Indicator -->
+        <Grid x:Name="LoadingGrid" 
+              Grid.Row="0" 
+              Grid.RowSpan="3" 
+              BackgroundColor="#020202" 
+              IsVisible="True">
+
+            <VerticalStackLayout HorizontalOptions="Center" 
+                               VerticalOptions="Center" 
+                               Spacing="10">
+                <ActivityIndicator IsRunning="True" 
+                                 Color="#007AFF" 
+                                 HeightRequest="50" 
+                                 WidthRequest="50"/>
+                <Label Text="Loading passwords..." 
+                       TextColor="White" 
+                       FontSize="16" 
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
 
         <!-- Container buttons -->
         <VerticalStackLayout Grid.Row="2"

@@ -1,4 +1,5 @@
 ﻿using PasswordManager.Model;
+using PasswordManager.Utils;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
@@ -21,6 +22,8 @@ namespace PasswordManager
             base.OnAppearing();
             Debug.WriteLine("OnAppearing started");
 
+            await EncryptionHelper.InitializeAsync();
+
             if (!await IsUserAuthenticatedAsync())
             {
                 Debug.WriteLine("User not authenticated. Redirecting to LoginPage...");
@@ -28,7 +31,7 @@ namespace PasswordManager
                 return;
             }
 
-            LoadingGrid.IsVisible = true; // Mostrar loading
+            LoadingGrid.IsVisible = true;
 
             try
             {
@@ -43,7 +46,7 @@ namespace PasswordManager
             }
             finally
             {
-                LoadingGrid.IsVisible = false; // Ocultar loading
+                LoadingGrid.IsVisible = false;
             }
         }
 
@@ -63,8 +66,8 @@ namespace PasswordManager
         {
             try
             {
-                // Agregamos un pequeño delay para asegurar que el loading sea visible
-                await Task.Delay(500);
+                // Delay to watch the loading in action
+                await Task.Delay(300);
 
                 if (File.Exists(_storageFile))
                 {
@@ -73,6 +76,8 @@ namespace PasswordManager
                     Passwords.Clear();
                     foreach (var password in loadedPasswords)
                     {
+                        // Decrypt password using EncryptionHelper
+                        password.Password = EncryptionHelper.Decrypt(password.Password);
                         Passwords.Add(password);
                     }
                 }
@@ -87,7 +92,22 @@ namespace PasswordManager
         {
             try
             {
-                string json = JsonSerializer.Serialize(Passwords.ToList());
+                var encryptedPasswords = new List<PasswordModel>();
+
+                foreach (var password in Passwords)
+                {
+                    // Encrypt password using EncryptionHelper
+                    string encryptedPassword = EncryptionHelper.Encrypt(password.Password);
+                    encryptedPasswords.Add(new PasswordModel
+                    {
+                        Service = password.Service,
+                        Username = password.Username,
+                        Password = encryptedPassword
+                    });
+                }
+
+                // Serialize and store encrypted passwords
+                string json = JsonSerializer.Serialize(encryptedPasswords);
                 await File.WriteAllTextAsync(_storageFile, json);
             }
             catch (Exception ex)
@@ -95,7 +115,6 @@ namespace PasswordManager
                 await DisplayAlert("Error", $"Error saving passwords: {ex.Message}", "OK");
             }
         }
-
         private async void OnAddPasswordClicked(object sender, EventArgs e)
         {
             if (sender is Button button)

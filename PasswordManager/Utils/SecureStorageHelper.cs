@@ -6,12 +6,14 @@ namespace PasswordManager.Utils
     {
         public static async Task SavePasswordAsync(PasswordModel password)
         {
-            await SecureStorage.Default.SetAsync($"{password.Service}_{password.Username}", password.Password);
+            string encryptedPassword = EncryptionHelper.Encrypt(password.Password);
+            await SecureStorage.Default.SetAsync($"{password.Service}_{password.Username}", encryptedPassword);
         }
 
         public static async Task<string> GetPasswordAsync(string service, string username)
         {
-            return await SecureStorage.Default.GetAsync($"{service}_{username}");
+            string encryptedPassword = await SecureStorage.Default.GetAsync($"{service}_{username}");
+            return EncryptionHelper.Decrypt(encryptedPassword);
         }
     }
 }
