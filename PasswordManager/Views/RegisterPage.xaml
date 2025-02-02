@@ -14,15 +14,26 @@
                    FontAttributes="Bold" />
 
             <Frame CornerRadius="8" Padding="10">
-                <Entry x:Name="UsernameEntry" Placeholder="Username" FontSize="18" />
+                <Entry x:Name="UsernameEntry" 
+                       Placeholder="Username" 
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                       PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
             </Frame>
 
             <Frame CornerRadius="8" Padding="10">
-                <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" FontSize="18" />
+                <Entry x:Name="PasswordEntry" 
+                       Placeholder="Password" 
+                       IsPassword="True" 
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                       PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
             </Frame>
 
             <Frame CornerRadius="8" Padding="10">
-                <Entry x:Name="ConfirmPasswordEntry" Placeholder="Confirm Password" IsPassword="True" FontSize="18" />
+                <Entry x:Name="ConfirmPasswordEntry" 
+                       Placeholder="Confirm Password" 
+                       IsPassword="True" 
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                       PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
             </Frame>
 
             <Button Text="Register"

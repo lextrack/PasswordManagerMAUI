@@ -28,14 +28,23 @@ namespace PasswordManager
                 return;
             }
 
-            string username = await SecureStorage.Default.GetAsync("current_user");
-            Debug.WriteLine($"Current user: {username}");
+            LoadingGrid.IsVisible = true; // Mostrar loading
 
-            _storageFile = Path.Combine(FileSystem.AppDataDirectory, $"passwords_{username}.json");
-            Debug.WriteLine($"Storage file: {_storageFile}");
+            try
+            {
+                string username = await SecureStorage.Default.GetAsync("current_user");
+                Debug.WriteLine($"Current user: {username}");
 
-            await LoadPasswordsAsync();
-            Debug.WriteLine("Passwords loaded successfully.");
+                _storageFile = Path.Combine(FileSystem.AppDataDirectory, $"passwords_{username}.json");
+                Debug.WriteLine($"Storage file: {_storageFile}");
+
+                await LoadPasswordsAsync();
+                Debug.WriteLine("Passwords loaded successfully.");
+            }
+            finally
+            {
+                LoadingGrid.IsVisible = false; // Ocultar loading
+            }
         }
 
         private async Task<bool> IsUserAuthenticatedAsync()
@@ -54,6 +63,9 @@ namespace PasswordManager
         {
             try
             {
+                // Agregamos un pequeño delay para asegurar que el loading sea visible
+                await Task.Delay(500);
+
                 if (File.Exists(_storageFile))
                 {
                     string json = await File.ReadAllTextAsync(_storageFile);
@@ -305,6 +317,28 @@ namespace PasswordManager
             {
                 await button.ScaleTo(1, 100);
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                bool shouldLogout = await DisplayAlert(
+                    "Confirm Logout",
+                    "If you go back, your session will be closed, are you sure?",
+                    "Yes",
+                    "No"
+                );
+
+                if (shouldLogout)
+                {
+                    SecureStorage.Default.Remove("current_user");
+                    await Navigation.PopToRootAsync();
+                    await Navigation.PushAsync(new LoginPage());
+                }
+            });
+
+            return true;
         }
     }
 }

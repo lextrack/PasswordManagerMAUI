@@ -9,6 +9,17 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        var buttons = this.GetVisualTreeDescendants().OfType<Button>();
+        foreach (var button in buttons)
+        {
+            button.Scale = 1;
+        }
+    }
+
     private async void OnLoginClicked(object sender, EventArgs e)
     {
         string username = UsernameEntry.Text;
@@ -25,7 +36,6 @@ public partial class LoginPage : ContentPage
         if (isAuthenticated)
         {
             await SecureStorage.Default.SetAsync("current_user", username);
-
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await Navigation.PushAsync(new MainPage());
@@ -39,7 +49,10 @@ public partial class LoginPage : ContentPage
 
     private async void OnRegisterClicked(object sender, EventArgs e)
     {
-        // Redirigir al usuario a la página de registro
+        if (sender is Button button)
+        {
+            button.Scale = 1;
+        }
         await Navigation.PushAsync(new RegisterPage());
     }
 

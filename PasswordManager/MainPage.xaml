@@ -22,19 +22,51 @@
                     FontSize="14"/>
         </Grid>
 
-        <!-- Lista de contraseñas en un ScrollView -->
+        <!-- Loading Indicator -->
+        <Grid x:Name="LoadingGrid" 
+              Grid.Row="0" 
+              Grid.RowSpan="3" 
+              BackgroundColor="#80000000" 
+              IsVisible="False">
+            <VerticalStackLayout HorizontalOptions="Center" 
+                               VerticalOptions="Center" 
+                               Spacing="10">
+                <ActivityIndicator IsRunning="True" 
+                                 Color="#007AFF" 
+                                 HeightRequest="50" 
+                                 WidthRequest="50"/>
+                <Label Text="Loading passwords..." 
+                       TextColor="White" 
+                       FontSize="16" 
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Passowrd list -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="10" Spacing="15">
                 <CollectionView x:Name="PasswordsList"
-                                ItemsSource="{Binding Passwords}"
-                                SelectionMode="Single"
-                                SelectionChanged="OnPasswordSelected"
-                                Margin="0,0,0,10">
+                              ItemsSource="{Binding Passwords}"
+                              SelectionMode="Single"
+                              SelectionChanged="OnPasswordSelected"
+                              Margin="0,0,0,10">
                     <CollectionView.EmptyView>
-                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                            <Label Text="No passwords saved yet" HorizontalOptions="Center"/>
-                            <Label Text="Click 'Add New Password' to get started" HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
+                        <Grid VerticalOptions="Center" 
+                              HeightRequest="200">
+                            <VerticalStackLayout HorizontalOptions="Center" 
+                                               VerticalOptions="Center" 
+                                               Spacing="10">
+                                <Label Text="No passwords saved yet" 
+                                       HorizontalOptions="Center"
+                                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"/>
+                                <Label Text="Click 'Add New Password' to get started" 
+                                       HorizontalOptions="Center"
+                                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                       FontSize="16"/>
+                            </VerticalStackLayout>
+                        </Grid>
                     </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -45,26 +77,33 @@
                                     </Grid.GestureRecognizers>
                                     <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
                                         <StackLayout Grid.Column="0" Spacing="3">
-                                            <Label Text="{Binding Service}" FontSize="18" FontAttributes="Bold"/>
-                                            <Label Text="{Binding Username}" FontSize="14"/>
-                                            <Label Text="{Binding CensoredPassword}" FontSize="14"/>
+                                            <Label Text="{Binding Service}" 
+                                                   FontSize="18" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                                            <Label Text="{Binding Username}" 
+                                                   FontSize="14"
+                                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                                            <Label Text="{Binding CensoredPassword}" 
+                                                   FontSize="14"
+                                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                                         </StackLayout>
 
                                         <ImageButton Grid.Column="1"
-                                                     Source="copy_icon.png"
-                                                     HeightRequest="32"
-                                                     WidthRequest="32"
-                                                     CommandParameter="{Binding .}"
-                                                     Clicked="OnCopyPasswordClicked"
-                                                     BackgroundColor="Transparent"/>
+                                                    Source="copy_icon.png"
+                                                    HeightRequest="32"
+                                                    WidthRequest="32"
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnCopyPasswordClicked"
+                                                    BackgroundColor="Transparent"/>
 
                                         <ImageButton Grid.Column="2"
-                                                     Source="delete_icon.png"
-                                                     HeightRequest="32"
-                                                     WidthRequest="32"       
-                                                     CommandParameter="{Binding .}"
-                                                     Clicked="OnDeletePasswordClicked"
-                                                     BackgroundColor="Transparent"/>
+                                                    Source="delete_icon.png"
+                                                    HeightRequest="32"
+                                                    WidthRequest="32"       
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnDeletePasswordClicked"
+                                                    BackgroundColor="Transparent"/>
                                     </Grid>
                                 </Grid>
                             </Frame>
