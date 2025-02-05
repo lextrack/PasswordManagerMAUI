@@ -18,7 +18,7 @@ namespace PasswordManager
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-            //builder.Services.AddSingleton<IFilePicker>(FilePicker.Default);
+           
             return builder.Build();
         }
     }

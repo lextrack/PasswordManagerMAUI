@@ -12,7 +12,7 @@
             {
                 return string.IsNullOrEmpty(Password)
                     ? string.Empty
-                    : new string('*', Password.Length);
+                    : "*****";
             }
         }
 

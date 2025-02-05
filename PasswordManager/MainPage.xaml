@@ -6,6 +6,13 @@
              Title="Simple Password Manager">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <!-- Top bar with Logout and About buttons -->
         <Grid Padding="10" Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -118,29 +125,8 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Loading Indicator -->
-        <Grid x:Name="LoadingGrid" 
-              Grid.Row="0" 
-              Grid.RowSpan="3" 
-              BackgroundColor="#020202" 
-              IsVisible="True">
-
-            <VerticalStackLayout HorizontalOptions="Center" 
-                               VerticalOptions="Center" 
-                               Spacing="10">
-                <ActivityIndicator IsRunning="True" 
-                                 Color="#007AFF" 
-                                 HeightRequest="50" 
-                                 WidthRequest="50"/>
-                <Label Text="Loading passwords..." 
-                       TextColor="White" 
-                       FontSize="16" 
-                       HorizontalOptions="Center"/>
-            </VerticalStackLayout>
-        </Grid>
-
         <!-- Container buttons -->
-        <VerticalStackLayout Grid.Row="2"
+        <VerticalStackLayout Grid.Row="3"
                              Padding="10"
                              Spacing="3"
                              VerticalOptions="End">
@@ -193,11 +179,25 @@
             </Grid>
         </VerticalStackLayout>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <!-- Loading Indicator -->
+        <Grid x:Name="LoadingGrid" 
+              Grid.Row="0" 
+              Grid.RowSpan="4" 
+              BackgroundColor="#020202" 
+              IsVisible="True">
+
+            <VerticalStackLayout HorizontalOptions="Center" 
+                               VerticalOptions="Center" 
+                               Spacing="10">
+                <ActivityIndicator IsRunning="True" 
+                                 Color="#007AFF" 
+                                 HeightRequest="50" 
+                                 WidthRequest="50"/>
+                <Label Text="Loading passwords..." 
+                       TextColor="White" 
+                       FontSize="16" 
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
