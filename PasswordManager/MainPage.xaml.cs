@@ -346,13 +346,29 @@ namespace PasswordManager
                     string json = await File.ReadAllTextAsync(fileResult.FullPath);
                     var loadedPasswords = JsonSerializer.Deserialize<ObservableCollection<PasswordModel>>(json);
 
-                    Passwords.Clear();
-                    foreach (var password in loadedPasswords)
+                    int addedCount = 0;
+                    foreach (var newPassword in loadedPasswords)
                     {
-                        Passwords.Add(password);
+                        bool exists = Passwords.Any(p =>
+                            p.Service.Equals(newPassword.Service, StringComparison.OrdinalIgnoreCase) &&
+                            p.Username.Equals(newPassword.Username, StringComparison.OrdinalIgnoreCase));
+
+                        if (!exists)
+                        {
+                            Passwords.Add(newPassword);
+                            _allPasswords.Add(newPassword);
+                            addedCount++;
+                        }
                     }
 
-                    await DisplayAlert("Backup", "Passwords loaded successfully!", "OK");
+                    await SavePasswordsAsync();
+
+                    string message = $"Backup loaded successfully!\nAdded {addedCount} new passwords.";
+                    if (addedCount < loadedPasswords.Count)
+                    {
+                        message += $"\nSkipped {loadedPasswords.Count - addedCount} duplicate entries.";
+                    }
+                    await DisplayAlert("Backup", message, "OK");
                 }
             }
             catch (Exception ex)
