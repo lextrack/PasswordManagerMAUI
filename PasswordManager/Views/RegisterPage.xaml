@@ -13,28 +13,28 @@
                    TextColor="#007AFF"
                    FontAttributes="Bold" />
 
-            <Frame CornerRadius="8" Padding="10">
-                <Entry x:Name="UsernameEntry" 
-                       Placeholder="Username" 
-                       TextColor="{AppThemeBinding Light=Black, Dark=White}" 
-                       PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
-            </Frame>
 
-            <Frame CornerRadius="8" Padding="10">
-                <Entry x:Name="PasswordEntry" 
-                       Placeholder="Password" 
-                       IsPassword="True" 
-                       TextColor="{AppThemeBinding Light=Black, Dark=White}" 
-                       PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
-            </Frame>
+            <Entry x:Name="UsernameEntry" 
+                    Placeholder="Username" 
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                    PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
 
-            <Frame CornerRadius="8" Padding="10">
-                <Entry x:Name="ConfirmPasswordEntry" 
-                       Placeholder="Confirm Password" 
-                       IsPassword="True" 
-                       TextColor="{AppThemeBinding Light=Black, Dark=White}" 
-                       PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
-            </Frame>
+
+
+            <Entry x:Name="PasswordEntry" 
+                    Placeholder="Password" 
+                    IsPassword="True" 
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                    PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
+
+
+
+            <Entry x:Name="ConfirmPasswordEntry" 
+                    Placeholder="Confirm Password" 
+                    IsPassword="True" 
+                    TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                    PlaceholderColor="{AppThemeBinding Light=#8a8a8a, Dark=#999999}" />
+
 
             <Button Text="Register"
                     Clicked="OnRegisterClicked"

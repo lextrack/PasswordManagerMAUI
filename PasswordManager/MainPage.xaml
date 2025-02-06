@@ -87,7 +87,7 @@
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="OnPasswordSelected" CommandParameter="{Binding .}"/>
                                     </Grid.GestureRecognizers>
-                                    <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="5">
+                                    <Grid ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="5">
                                         <StackLayout Grid.Column="0" Spacing="3">
                                             <Label Text="{Binding Service}" 
                                                    FontSize="18" 
@@ -110,6 +110,14 @@
                                                     BackgroundColor="Transparent"/>
 
                                         <ImageButton Grid.Column="2"
+                                                    Source="edit.png"
+                                                    HeightRequest="32"
+                                                    WidthRequest="32"
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnEditPasswordClicked"
+                                                    BackgroundColor="Transparent"/>
+
+                                        <ImageButton Grid.Column="3"
                                                     Source="delete_icon.png"
                                                     HeightRequest="32"
                                                     WidthRequest="32"       

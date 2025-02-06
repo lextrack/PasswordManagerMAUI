@@ -414,5 +414,13 @@ namespace PasswordManager
 
             return true;
         }
+
+        private async void OnEditPasswordClicked(object sender, EventArgs e)
+        {
+            if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
+            {
+                await Navigation.PushAsync(new EditPasswordPage(this, password));
+            }
+        }
     }
 }
