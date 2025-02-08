@@ -13,6 +13,12 @@ Safety starts with understanding how developers collect and share your data. Dat
 - Local backup creation
 - Intuitive and easy-to-use interface
 
+## Instructions for Windows
+
+- Extract the contents somewhere, in Documents or C:/ is a good idea. Never extract the folder to C:/Program Files (x86) or any other system folder.
+- Install Microsoft Windows Desktop Runtime 8.0.12 (x64) (if it is not installed on your system, running the application exe will take you to the website for download and installation).
+- Inside the folder, find the executable PasswordManager.exe to use the application.
+
 <h2 align="center">Captures</h2>
 <p align="left">
 
