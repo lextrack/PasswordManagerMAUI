@@ -1,7 +1,7 @@
 <h2 align="center">Simple Password Manager</h2>
 <p align="left">
 
-Safety starts with understanding how developers collect and share your data. Data privacy and security practices may vary based on your use, region, and age. The developer provided this information and may update it over time.
+Manage your passwords securely and simply, offline with automatic encryption and backup system.
 
 ## Features
 
