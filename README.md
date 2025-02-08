@@ -19,8 +19,7 @@ Manage your passwords securely and simply, offline with automatic encryption and
 - Install Microsoft Windows Desktop Runtime 8.0.12 (x64) (if it is not installed on your system, running the application exe will take you to the website for download and installation).
 - Inside the folder, find the executable PasswordManager.exe to use the application.
 
-<h2 align="center">Captures</h2>
-<p align="left">
+## Captures
 
 <img src="./PasswordManager/Captures/1.png">
 <img src="./PasswordManager/Captures/2.png">
