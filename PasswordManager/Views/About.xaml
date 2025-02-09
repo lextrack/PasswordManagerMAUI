@@ -28,7 +28,7 @@
                                    TextColor="{AppThemeBinding Light=#333333, Dark=#E0E0E0}"
                                    FontSize="20"
                                    FontAttributes="Bold"/>
-                            <Label Text="v1.0.0"
+                            <Label Text="v1.0.1"
                                    TextColor="{AppThemeBinding Light=#666666, Dark=#A0A0A0}"
                                    FontSize="14"/>
                         </VerticalStackLayout>

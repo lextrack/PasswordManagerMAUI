@@ -234,6 +234,7 @@ namespace PasswordManager
                 await DisplayAlert("Copied", "Password copied to clipboard", "OK");
             }
         }
+
         private async void OnSaveBackupClicked(object sender, EventArgs e)
         {
             try
@@ -252,10 +253,10 @@ namespace PasswordManager
                     }
                 }
 
-                string json = JsonSerializer.Serialize(Passwords);
+                // Use the new encryption method for backup
+                string encryptedJson = EncryptionHelper.EncryptBackup(Passwords);
 
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-
                 string fileName = $"passwords_backup_{timestamp}.json";
                 string backupPath;
 
@@ -278,8 +279,8 @@ namespace PasswordManager
                     backupPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
                 }
 
-                await File.WriteAllTextAsync(backupPath, json);
-                await DisplayAlert("Backup", $"Backup saved successfully at: {backupPath}", "OK");
+                await File.WriteAllTextAsync(backupPath, encryptedJson);
+                await DisplayAlert("Backup", $"Encrypted backup saved successfully at: {backupPath}", "OK");
 
                 bool shareFile = await DisplayAlert("Share Backup", "Do you want to share the backup file?", "Yes", "No");
                 if (shareFile)
@@ -343,8 +344,10 @@ namespace PasswordManager
                 var fileResult = await FilePicker.Default.PickAsync(options);
                 if (fileResult != null)
                 {
-                    string json = await File.ReadAllTextAsync(fileResult.FullPath);
-                    var loadedPasswords = JsonSerializer.Deserialize<ObservableCollection<PasswordModel>>(json);
+                    string encryptedJson = await File.ReadAllTextAsync(fileResult.FullPath);
+
+                    // Use the new decryption method for backup
+                    var loadedPasswords = EncryptionHelper.DecryptBackup(encryptedJson);
 
                     int addedCount = 0;
                     foreach (var newPassword in loadedPasswords)
@@ -377,19 +380,11 @@ namespace PasswordManager
             }
         }
 
-        private async void OnButtonPressed(object sender, EventArgs e)
+        private async void OnEditPasswordClicked(object sender, EventArgs e)
         {
-            if (sender is Button button)
+            if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
             {
-                await button.ScaleTo(0.95, 100);
-            }
-        }
-
-        private async void OnButtonReleased(object sender, EventArgs e)
-        {
-            if (sender is Button button)
-            {
-                await button.ScaleTo(1, 100);
+                await Navigation.PushAsync(new EditPasswordPage(this, password));
             }
         }
 
@@ -415,11 +410,19 @@ namespace PasswordManager
             return true;
         }
 
-        private async void OnEditPasswordClicked(object sender, EventArgs e)
+        private async void OnButtonPressed(object sender, EventArgs e)
         {
-            if (sender is ImageButton imageButton && imageButton.BindingContext is PasswordModel password)
+            if (sender is Button button)
             {
-                await Navigation.PushAsync(new EditPasswordPage(this, password));
+                await button.ScaleTo(0.95, 100);
+            }
+        }
+
+        private async void OnButtonReleased(object sender, EventArgs e)
+        {
+            if (sender is Button button)
+            {
+                await button.ScaleTo(1, 100);
             }
         }
     }

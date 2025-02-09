@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using PasswordManager.Model;
+using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace PasswordManager.Utils
 {
@@ -78,5 +80,30 @@ namespace PasswordManager.Utils
                 }
             }
         }
+
+        public static string EncryptBackup(IEnumerable<PasswordModel> passwords)
+        {
+            var backupPasswords = passwords.Select(p => new PasswordModel
+            {
+                Service = p.Service,
+                Username = p.Username,
+                Password = Encrypt(p.Password)  // Encrypt each password
+            }).ToList();
+
+            return JsonSerializer.Serialize(backupPasswords);
+        }
+
+        public static List<PasswordModel> DecryptBackup(string encryptedJson)
+        {
+            var backupPasswords = JsonSerializer.Deserialize<List<PasswordModel>>(encryptedJson);
+
+            return backupPasswords.Select(p => new PasswordModel
+            {
+                Service = p.Service,
+                Username = p.Username,
+                Password = Decrypt(p.Password)  // Decrypt each password
+            }).ToList();
+        }
+
     }
 }
