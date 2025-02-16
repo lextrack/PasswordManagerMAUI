@@ -46,8 +46,8 @@
                     CornerRadius="8"
                     Padding="20,10"/>
 
-            <Label Text="Please choose a username and a strong password. Make sure to confirm your password."
-                   FontSize="14"
+            <Label Text="Please choose a username and a strong password. Make sure to double-check your password."
+                   FontSize="15"
                    TextColor="#666"
                    HorizontalOptions="Center"
                    HorizontalTextAlignment="Center"
