@@ -28,7 +28,3 @@ Manage your passwords securely and simply, offline with automatic encryption and
 ##  Documentation
 
 For details on the key aspects of the application, check out the [Documentation](DOCUMENTATION.md).
-
-## Download for Android
-
-[![Google Play](https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg)](https://play.google.com/store/apps/details?id=com.lextrack.passwordmanager)
