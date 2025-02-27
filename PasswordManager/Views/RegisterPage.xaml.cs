@@ -2,9 +2,29 @@ namespace PasswordManager.Views;
 
 public partial class RegisterPage : ContentPage
 {
+    private const string GenericUsername = "testuser";
+    private const string GenericPassword = "testpassword";
+
     public RegisterPage()
     {
         InitializeComponent();
+        CreateGenericUserIfNotExists();
+    }
+
+    private async Task CreateGenericUserIfNotExists()
+    {
+        string storedPassword = await SecureStorage.Default.GetAsync(GenericUsername);
+
+        if (storedPassword == null)
+        {
+            await SecureStorage.Default.SetAsync(GenericUsername, GenericPassword);
+
+            string userPasswordsFile = Path.Combine(FileSystem.AppDataDirectory, $"passwords_{GenericUsername}.json");
+            if (!File.Exists(userPasswordsFile))
+            {
+                await File.WriteAllTextAsync(userPasswordsFile, "[]");
+            }
+        }
     }
 
     private async void OnRegisterClicked(object sender, EventArgs e)
